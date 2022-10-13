@@ -8,10 +8,11 @@ import { Product } from "@shopware-pwa/types";
 const props = defineProps<{
   product: Product;
 }>();
-const { currency } = useSessionContext();
 const { price, fromPrice, originalPrice, showOriginalPrice } = useProductPrice(
   props.product
 );
+const { getFormattedPrice } = usePrice();
+
 const priceData = computed(() => {
   let priceData = {};
   Object.keys(props.product).forEach((key) => {
@@ -119,13 +120,13 @@ const priceData = computed(() => {
             >
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-3xl font-bold text-gray-900 dark:text-white"
-              >{{ currency?.symbol }} {{ price }}</span
-            >
+            <span class="text-3xl font-bold text-gray-900 dark:text-white">{{
+              getFormattedPrice(price)
+            }}</span>
             <span
               v-if="showOriginalPrice"
               class="text-3xl font-bold text-red-400 line-through dark:text-white"
-              >{{ currency?.symbol }} {{ originalPrice }}</span
+              >{{ getFormattedPrice(originalPrice) }}</span
             >
             <button
               disabled
